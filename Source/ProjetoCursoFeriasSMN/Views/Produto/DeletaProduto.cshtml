@@ -1,0 +1,68 @@
+﻿@{ Layout = null;}
+@model ProjetoCursoFeriasSMN.Web.Application.Model.Produto
+
+<div id="modalDeletarProduto" class="modal">
+    <div class="modal-content">
+        <h4 class="bold">Deseja mesmo deletar este produto? </h4>
+        <div class="row">
+            @using (Ajax.BeginForm("DeletarConfirmado", "Produto", new AjaxOptions
+            {
+                HttpMethod = "GET",
+                OnSuccess = "RecarregaGridDeletaProduto(data)",
+                OnFailure = "Error(xhr)"
+            }))
+            {
+                <input type="hidden" id="codigoProduto" name="codigoProduto" value="@Model.CodigoProduto" />
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label for="txtIdProdutoDeletar">Código do produto</label>
+                        <input id="txtIdProdutoDeletar" name="Id" type="text" readonly value="@Model.CodigoProduto">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s4">
+                        <label for="txtNomeProdutoDeletar">Nome</label>
+                        <input id="txtNomeProdutoDeletar" name="Nome" type="text" readonly value="@Model.Nome">
+                    </div>
+                    <div class="input-field col s4">
+                        <label for="txtPrecoDeletar">Valor R$</label>
+                        <input type="text" name="Preco" id="txtPrecoDeletar" readonly value="@Model.Preco">
+                    </div>
+                    <div class="input-field col s4">
+                        <label for="txtEstoqueDeletar">Estoque</label>
+                        <input type="number" name="Estoque" id="txtEstoqueDeletar" readonly value="@Model.Estoque">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="modal-action modal-close waves-effect waves-light btn">
+                        <i class="material-icons left">delete_forever</i>Confirma
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $("#modalDeletarProduto").modal();
+
+    function RecarregaGridDeletaProduto(data) {
+        //Exibindo um feedback de sucesso
+        Materialize.toast(data, 1000);
+
+        //Fazendo a requisição no método que lista os produtos
+        $.get('@Url.Action("Listar","Produto")')
+            .done(function (data) {
+                $("#gridProdutos tbody").html(data).slideDown("fast");
+            })
+            .fail(function (xhr) {
+                Materialize.toast(xhr.responseText, 4000);
+            });
+    }
+
+    function Error(xhr) {
+        Materialize.toast(xhr.responseText, 5000);
+    }
+
+</script>

@@ -1,0 +1,78 @@
+﻿@{ Layout = null;}
+@model ProjetoCursoFeriasSMN.Web.Application.Model.Cliente
+
+<div id="modalDetalhesCliente" class="modal">
+    <div class="modal-content">
+        <h4 class="bold">@Model.CodigoCliente - @Model.Nome</h4>
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label for="txtNomeDetalha">Nome</label>
+                        <input id="txtNomeDetalha" name="Nome" type="text" value="@Model.Nome" readonly>
+                    </div>
+                    <div class="input-field col s6">
+                        <label for="txtCpfDetalha">Cpf</label>
+                        <input id="txtCpfDetalha" type="text" value="@Model.Cpf" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label for="txtFoneDetalha">Telefone</label>
+                        <input id="txtFoneDetalha" type="text" value="@Model.Telefone" readonly>
+                    </div>
+                    <div class="input-field col s6">
+                        <label for="txtEmailDetalha">Email</label>
+                        <input id="txtEmailDetalha" type="email" value="@Model.Email" readonly>
+                    </div>
+                </div>
+                <h5>Endereço</h5>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label for="txtCepDetalha">Cep</label>
+                        <input id="txtCepDetalha" type="text" value="@Model.Endereco.Cep" readonly>
+                    </div>
+                    <div class="input-field col s6">
+                        <label for="txtLogradouroDetalha">Logradouro:</label>
+                        <input id="txtLogradouroDetalha" type="text" value="@Model.Endereco.Logradouro" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <select id="txtEstadoDetalha" disabled="">
+                            <option value="@Model.Endereco.Estado" selected>@Model.Endereco.Estado</option>
+                        </select>
+                        <label>Estado</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <label for="txtCidadeDetalha">Cidade</label>
+                        <input id="txtCidadeDetalha" type="text" value="@Model.Endereco.Cidade" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label for="txtBairroDetalha">Bairro</label>
+                        <input id="txtBairroDetalha" type="text" value="@Model.Endereco.Bairro" readonly>
+                    </div>
+                    <div class="input-field col s6">
+                        <label for="txtNumeroDetalha">Número</label>
+                        <input id="txtNumeroDetalha" type="text" value="@Model.Numero" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label for="txtComplementoDetalha">Complemento</label>
+                        <textarea id="txtComplementoDetalha" class="materialize-textarea" readonly>@Model.Complemento</textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $("select").material_select();
+    $(".modal").modal();
+
+</script>

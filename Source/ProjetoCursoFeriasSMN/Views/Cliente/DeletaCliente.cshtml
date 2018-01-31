@@ -1,0 +1,105 @@
+﻿@{ Layout = null;}
+@model ProjetoCursoFeriasSMN.Web.Application.Model.Cliente
+
+<div id="modalDeletaCliente" class="modal">
+    <div class="modal-content">
+        <h4 class="bold">Deseja mesmo deletar este cliente?</h4>
+        <div class="row">
+            @using (Ajax.BeginForm("DeletarConfirma", "Cliente", new AjaxOptions
+            {
+                HttpMethod = "Get",
+                OnSuccess = "RecarregaGrid(data)",
+                OnFailure = "Error(xhr)"
+            }))
+            {
+                <input type="hidden" name="codigoCliente" value="@Model.CodigoCliente" />
+                <input type="hidden" name="codigoEndereco" value="@Model.CodigoEndereco" />
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label for="txtNomeDeleta">Nome</label>
+                        <input id="txtNomeDeleta" name="Nome" type="text" value="@Model.Nome" readonly>
+                    </div>
+                    <div class="input-field col s6">
+                        <label for="txtCpfDeleta">Cpf</label>
+                        <input id="txtCpfDeleta" type="text" value="@Model.Cpf" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label for="txtFoneDeleta">Telefone</label>
+                        <input id="txtFoneDeleta" type="text" value="@Model.Telefone" readonly>
+                    </div>
+                    <div class="input-field col s6">
+                        <label for="txtEmailDeleta">Email</label>
+                        <input id="txtEmailDeleta" type="email" value="@Model.Email" readonly>
+                    </div>
+                </div>
+                <h5>Endereço</h5>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label for="txtCepDeleta">Cep</label>
+                        <input id="txtCepDeleta" type="text" value="@Model.Endereco.Cep" readonly>
+                    </div>
+                    <div class="input-field col s6">
+                        <label for="txtLogradouroDeleta">Logradouro:</label>
+                        <input id="txtLogradouroDeleta" type="text" value="@Model.Endereco.Logradouro" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <select id="txtEstadoDeleta" disabled>
+                            <option value="@Model.Endereco.Estado" selected>@Model.Endereco.Estado</option>
+                        </select>
+                        <label>Estado</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <label for="txtCidadeDeleta">Cidade</label>
+                        <input id="txtCidadeDeleta" type="text" value="@Model.Endereco.Cidade" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label for="txtBairroDeleta">Bairro</label>
+                        <input id="txtBairroDeleta" type="text" value="@Model.Endereco.Bairro" readonly>
+                    </div>
+                    <div class="input-field col s6">
+                        <label for="txtNumeroDeleta">Número</label>
+                        <input id="txtNumeroDeleta" type="text" value="@Model.Numero" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label for="txtComplementoDeleta">Complemento</label>
+                        <textarea id="txtComplementoDeleta" class="materialize-textarea" readonly>@Model.Complemento</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="modal-action modal-close waves-effect waves-light btn">
+                        <i class="material-icons left">delete_forever</i>Confirma
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(".modal").modal();
+    $("select").material_select();
+
+    function RecarregaGrid(data) {
+        //Exibindo um feedback de sucesso
+        Materialize.toast(data, 1000);
+
+        //Fazendo a requisição no método que lista os produtos
+        $.get('@Url.Action("Listar","Cliente")')
+            .done(function (data) {
+                $("#gridClientes tbody").html(data).slideDown("fast");
+            })
+            .fail(function (xhr) {
+                Materialize.toast(xhr.responseText, 4000);
+            });
+    }
+
+</script>

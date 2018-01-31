@@ -1,0 +1,70 @@
+﻿@{ Layout = null;}
+@model ProjetoCursoFeriasSMN.Web.Application.Model.Produto
+
+<div id="modalEditarProduto" class="modal">
+    <div class="modal-content">
+        <h4 class="bold">@Model.CodigoProduto - @Model.Nome</h4>
+        <div class="row">
+            @using (Ajax.BeginForm("Salvar", "Produto", new AjaxOptions
+            {
+                HttpMethod = "POST",
+                OnSuccess = "RecarregaGridEditaProduto(data)",
+                OnFailure = "Error(xhr)"
+            }))
+            {
+                <input type="hidden" id="codigoProduto" name="codigoProduto" value="@Model.CodigoProduto" />
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label for="txtIdProdutoEditar">Código do produto</label>
+                        <input id="txtIdProdutoEditar" name="Id" type="text" readonly="" value="@Model.CodigoProduto">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s4">
+                        <label for="txtNomeProdutoEditar">Nome</label>
+                        <input id="txtNomeProdutoEditar" name="Nome" type="text" value="@Model.Nome">
+                    </div>
+                    <div class="input-field col s4">
+                        <label for="txtPrecoEditar">Valor R$</label>
+                        <input type="text" name="Preco" id="txtPrecoEditar" value="@Model.Preco">
+                    </div>
+                    <div class="input-field col s4">
+                        <label for="txtEstoqueEditar">Estoque</label>
+                        <input type="number" name="Estoque" id="txtEstoqueEditar" value="@Model.Estoque">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="modal-action modal-close waves-effect waves-light btn">
+                        <i class="material-icons left">create</i>Editar
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $("#modalEditarProduto").modal();
+
+    $("#txtPrecoEditar").mask("#.##0,00", { reverse: true });
+
+    function RecarregaGridEditaProduto(data) {
+        //Exibindo um feedback de sucesso
+        Materialize.toast(data, 1000);
+
+        //Fazendo a requisição no método que lista os produtos
+        $.get('@Url.Action("Listar","Produto")')
+            .done(function (data) {
+                $("#gridProdutos tbody").html(data).slideDown("fast");
+            })
+            .fail(function (xhr) {
+                Materialize.toast(xhr.responseText, 4000);
+            });
+    }
+
+    function Error(xhr) {
+        Materialize.toast(xhr.responseText, 5000);
+    }
+
+</script>

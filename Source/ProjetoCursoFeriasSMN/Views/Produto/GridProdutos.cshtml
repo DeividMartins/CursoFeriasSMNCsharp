@@ -1,0 +1,65 @@
+﻿@{ Layout = null;}
+@model IEnumerable<ProjetoCursoFeriasSMN.Web.Application.Model.Produto>
+    
+@if (Model != null && Model.Any())
+{
+    foreach (var produto in Model)
+    {
+        <tr data-codigoProduto="@produto.CodigoProduto">
+            <td>@produto.CodigoProduto</td>
+            <td>@produto.Nome</td>
+            <td>@produto.Preco</td>
+            <td>@produto.Estoque</td>
+            <td style="float:right">
+                <a class="btn-floating waves-effect waves-light red tooltipped" onclick="EditaProduto(this)" data-position="bottom"
+                   data-delay="50" data-tooltip="Editar">
+                    <i class="material-icons">mode_edit</i>
+                </a>
+                <a class="btn-floating waves-effect waves-light red tooltipped" onclick="DeletaProduto(this)" ata-position="bottom"
+                   data-delay="50" data-tooltip="Deletar">
+                    <i class="material-icons">delete</i>
+                </a>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="5">Nenhum registro encontrado</td>
+    </tr>
+}
+
+<script>
+    
+    $(".tooltipped").tooltip({ delay: 50 });
+
+    function EditaProduto(element) {
+        $.get('@Url.Action("Editar","Produto")',
+                {
+                    codigoProduto: $(element).closest("tr").attr("data-codigoProduto")
+                })
+            .done(function (data) {
+                $("#modalEdicaoProduto").html(data);
+                $("#modalEditarProduto").modal("open");
+                FocaInputs("#txtIdProdutoEditar, #txtNomeProdutoEditar, #txtEstoqueEditar, #txtPrecoEditar");
+            }).fail(function (xhr) {
+                Materialize.toast(xhr.responseText, 5000);
+            });
+    }
+
+    function DeletaProduto(element) {
+        $.get('@Url.Action("Deletar","Produto")',
+                {
+                    codigoProduto: $(element).closest("tr").attr("data-codigoProduto")
+                })
+            .done(function (data) {
+                $("#modalDeletaProduto").html(data);
+                $("#modalDeletarProduto").modal("open");
+                FocaInputs("#txtIdProdutoDeletar, #txtNomeProdutoDeletar, #txtEstoqueDeletar, #txtPrecoDeletar");
+            }).fail(function (xhr) {
+                Materialize.toast(xhr.responseText, 5000);
+            });
+    }
+
+</script>
